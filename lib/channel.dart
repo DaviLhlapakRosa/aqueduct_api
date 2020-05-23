@@ -24,25 +24,14 @@ class SimpleApiChannel extends ApplicationChannel {
   ///
   /// This method is invoked after [prepare].
   @override
-  Controller get entryPoint {
-    final router = Router();
-
-    // Prefer to use `link` instead of `linkFunction`.
-    // See: https://aqueduct.io/docs/http/request_controller/
-    router.route("/reads/[:id]").link(()=>ReadsController());
-
-    router
-    .route("/")
-    .linkFunction((request)=> Response.ok("Hello World")..contentType = ContentType.html);
-
-    router
-    .route("/client")
-    .linkFunction((request)async{
+  Controller get entryPoint => Router()
+    //  
+    ..route("/reads/[:id]").link(()=>ReadsController())
+    //
+    ..route("/").linkFunction((request)=> Response.ok("Hello World")..contentType = ContentType.html)
+    //
+    ..route("/client").linkFunction((request)async{
       var client = await File('client.html').readAsString();
       return Response.ok(client)..contentType = ContentType.html;
     });
-
-
-    return router;
-  }
 }
